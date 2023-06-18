@@ -3,11 +3,11 @@
     align-items: center;
 }
 
-.nav-link{
+.nav-link {
     color: grey;
 }
 
-.active{
+.active {
     font-size: 23px;
     color: white;
     margin: 0;
@@ -17,14 +17,24 @@
     color: white;
 }
 
-.cart{
-    width:100%;
+.card {
+    background-color: white;
+    width: 250px;
+    padding: 25px 20px;
+    margin-top: 20px;
+    margin-right: 30px;
+    border: none;
+}
+
+.cart {
+    width: 100%;
     height: 300px;
     text-align: center;
 }
+#product-container {
+    display: flex;
+}
 
-
-
-
-
-
+button{
+   
+}

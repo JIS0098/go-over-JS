@@ -22,17 +22,11 @@
     </nav>
     <div class="main" style="padding: 30px;">
         <input type="text" placeholder="검색어 입력">
-        <div class="product-container" style="background-color: white; width: 250px; padding: 25px 20px; margin-top: 20px;">
-            <img style="width:100%;" src="pr1.JPG">
-            <h3>식기세척기</h3>
-            <p>세척나라</p>
-            <p>가격 : 10000</p>
-            <button>담기</button>
-        </div>
+        <div id="product-container"></div>
         <div class="cart-container" style="background-color:lightgrey; padding:20px; margin-top: 30px;">
             <h5 style="font-weight: 600;  margin-top: 20px;">장바구니</h5>
             <div class="cart" style="background-color: black; color: white">
-                여기로 드래그 
+                여기로 드래그
             </div>
         </div>
     </div>
@@ -41,9 +35,27 @@
         let 눌렀던거
         $('.nav a').on('click', (e) => {
             $(e.target).css('color', 'white');
-            $(눌렀던거).css('color','gray')
+            $(눌렀던거).css('color', 'gray')
             눌렀던거 = e.target
         })
+
+
+        $.get('store.json').done((data) => {
+            var productList = data.products
+            productList.forEach((product) => {
+                var productCard =
+                    `<div class="card">
+                        <img style="width:100%;" src="${product.photo}">
+                            <h5 style="margin-top:20px; font-weight: 700;">${product.title}</h5>
+                            <p>${product.brand}</p>
+                            <p style=" font-size: 19px;  font-weight: 500;">가격 : ${product.price}</p>
+                            <button type="button" style=" width: 60px;" class="btn btn-dark">담기</button>
+                    </div>`
+                $('#product-container').append(productCard);
+            });
+        });
+
+
 
 
     </script>
