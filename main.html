@@ -20,24 +20,27 @@
   </head>
 
   <body style="background-color: #f4f4f4">
-    <nav class="nav" style="background-color: #212529">
+    <nav class="nav">
       <a class="nav-link active" aria-current="page" href="#">집꾸미기</a>
       <a class="nav-link" href="#">Home</a>
       <a class="nav-link" href="#">스토어</a>
       <a class="nav-link" href="#">시공견적</a>
     </nav>
-    <div class="main" style="padding: 30px">
-      <input class="search-box" type="text" placeholder="검색어 입력" />
-      <div id="product-container"></div>
-      <div
-        class="cart-container"
-        style="background-color: lightgrey; padding: 20px; margin-top: 30px"
-      >
-        <h5 style="font-weight: 600; margin-top: 20px">장바구니</h5>
-        <div class="cart" style="background-color: black; color: white">
-          여기로 드래그
-        </div>
-      </div>
+
+    <div class="container">
+      <input class="search" type="text" placeholder="검색어 입력" />
+    </div>
+
+    <div id="container">
+      <div class="row product-list"></div>
+    </div>
+
+    <div
+      class="container"
+      style="background-color: lightgrey; padding: 20px; margin-top: 20px"
+    >
+      <h4>장바구니</h4>
+      <div class="cart">여기로 드래그</div>
     </div>
 
     <script>
@@ -50,33 +53,24 @@
 
       $.get("store.json").done((data) => {
         var productList = data.products;
-        var productCard;
-        var 검색어 = "";
-        var arr =[]
+        
         productList.forEach((product) => {
-          productCard = `<div class="card">
-                        <img style="width:100%;" src="${product.photo}">
-                            <h5 style="margin-top:20px; margin-bottom:0px; font-weight: 700;">${product.title}</h5>
-                            <p>${product.brand}</p>
-                            <p style=" font-size: 19px;  font-weight: 500;">가격 : ${product.price}</p>
-                            <button type="button" style=" width: 60px;" class="btn btn-dark">담기</button>
-                    </div>`;
-          $("#product-container").append(productCard);
+          $('.product-list').append(
+            `<div class="col-md-3">
+             <div class="item" draggable="true" data-id="${product.id}">
+              <img src="${product.photo}"/>
+              <h4>${product.title}</h4>
+              <p>${product.brand}</p>
+              <p>가격 : ${product.price}</p>
+              <button class="add" data-id="${product.id}">담기</button>
+             </div>
+            </div>`
+          )
         });
 
-        $('.search-box').on('input',(e)=>{
-            검색어 = e.target.value
-            if(검색어 != ""){
-      
-        }else{
-           
-        }
-        })
-      
-       
-
-    })
+      });
     </script>
+    <!-- //만약 제품이름에 검색어가 포함되어 있으면 제품카드를 보여준다. -->
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
