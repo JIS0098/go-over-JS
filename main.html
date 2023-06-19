@@ -81,12 +81,14 @@
             </div>`
           )
         });
-        
-        $('.product-list h4').each((i, h4) => {
-          let title = h4.innerHTML
-          title = title.replace(검색어, `<span style="background : yellow">${검색어}</span>`)
-          h4.innerHTML = title
+        // 그려진 html에 제품이름태그를 모두가져온다
+        // 가져온 제품이름태그의 요소(글자)에 검색어와 같은 부분에 배경스타일을 준 태그를 넣어 다시 요소에 넣어준다 
+
+        $('.product-list h4').each((i,h4)=>{
+          var title = h4.innerHTML
           console.log(title)
+          title = title.replace(검색어,`<span style="background : yellow">${검색어}</span>`)
+          h4.innerHTML = title
         })
       });
     })
