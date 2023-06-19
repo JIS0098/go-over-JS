@@ -53,7 +53,7 @@
 
       $.get("store.json").done((data) => {
         var productList = data.products;
-        
+        var 검색어 = ''
         productList.forEach((product) => {
           $('.product-list').append(
             `<div class="col-md-3">
@@ -68,9 +68,32 @@
           )
         });
 
+        $(".search").on('input',()=>{
+          검색어 = $('.search').val();
+          // 필터로 검색한 제품을 담아 다시 html로 그려준다
+          var arr = productList.filter((product)=>{
+            return product.title.includes(검색어) || product.brand.includes(검색어)
+          })
+
+          $('.product-list').html('');
+          arr.forEach((product) => {
+          $('.product-list').append(
+            `<div class="col-md-3">
+             <div class="item" draggable="true" data-id="${product.id}">
+              <img src="${product.photo}"/>
+              <h4>${product.title}</h4>
+              <p>${product.brand}</p>
+              <p>가격 : ${product.price}</p>
+              <button class="add" data-id="${product.id}">담기</button>
+             </div>
+            </div>`
+          )
+        });
+        })
+
       });
     </script>
-    <!-- //만약 제품이름에 검색어가 포함되어 있으면 제품카드를 보여준다. -->
+    
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
