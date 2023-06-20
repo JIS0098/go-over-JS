@@ -62,21 +62,27 @@
           )
         });
 
-        //제품 드래그해서 장바구니에 담기
+
+
+        // 장바구니가 비워져있고
+
+        // 만약 버튼눌렀을때 장바구니에 아이디가 같은 상품이 없으면  장바구니에 제품html을 추가시키고 
+        // 있으면 숫자창의 숫자가 +1이 된다 
+
+        // 만약 버튼을 누르지 않고 
+        // 드래그를 했을때 장바구니에 아이디가 같은 상품이 없으면  장바구니에 제품html을 추가시키고 
+        // 있으면 숫자창의 숫자가 +1이 된다 
         $('.item').on('dragstart', (e) => {
           e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
         })
-        $('.cart').on('drop', (e) => {
-          
-         
 
+        $('.cart').on('drop', (e) => {
           var data = e.originalEvent.dataTransfer.getData('product')
           console.log(data)
 
           var cartProduct = productList.filter((product) => {
             return product.id == data
           })
-
           cartProduct.forEach((product) => {
             $('.cart').append(
               `<div class="col-md-3" >
@@ -85,14 +91,12 @@
               <h4>${product.title}</h4>
               <p>${product.brand}</p>
               <p>가격 : ${product.price}</p>
-              <input class="num" type="text">
+              <input type="text" value="1">
              </div>
             </div>`
             )
           });
-
         })
-
 
         $('.cart').on('dragover', (e) => {
           e.preventDefault()
