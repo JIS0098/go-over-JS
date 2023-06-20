@@ -32,7 +32,7 @@
   <div class="container" style="background-color: lightgrey; padding: 20px; margin-top: 20px">
     <h4>장바구니</h4>
     <div class="row cart">
-      <p style="color: white;">여기로 드래그</p>
+      <p class="cart-text">여기로 드래그</p>
     </div>
 
 
@@ -51,57 +51,49 @@
         productList.forEach((product) => {
           $('.product-list').append(
             `<div class="col-md-3">
-             <div class="item" draggable="true" data-id="${product.id}">
-              <img src="${product.photo}"/>
-              <h4>${product.title}</h4>
-              <p>${product.brand}</p>
-              <p>가격 : ${product.price}</p>
-              <button class="add" data-id="${product.id}">담기</button>
-             </div>
-            </div>`
+            <div class="item" draggable="true" data-id="${product.id}">
+            <img src="${product.photo}"/>
+            <h4>${product.title}</h4>
+            <p>${product.brand}</p>
+            <p>가격 : ${product.price}</p>
+            <button class="add" data-id="${product.id}">담기</button>
+            </div>
+          </div>`
           )
         });
 
+        // 담기부터 제대로 다시하기 
+        // 카드 배열을 만들고 아이디와 수량을 체크해 넣는다. 
 
+        // let count=1
+        // let arr =[]
+        // $('.item').on('dragstart', (e) => {
+        //   e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
+        // })
+        // $('.cart').on('drop', (e) => {
+        //   $(".cart-text").html('')
+        //   var data = e.originalEvent.dataTransfer.getData('product')
+        //   let cartProduct = productList.filter((product) => {
+        //     return product.id == data
+        //   })
 
-        // 장바구니가 비워져있고
+   
+        //   $('.cart').append(
+        //     `<div class="col-md-3" >
+        //     <div class="cart-item" draggable="true" data-id="${cartProduct[0].id}">
+        //     <img src="${cartProduct[0].photo}"/>
+        //     <h4>${cartProduct[0].title}</h4>
+        //     <p>${cartProduct[0].brand}</p>
+        //     <p>가격 : ${cartProduct[0].price}</p>
+        //     <input class=num type="text" value=${count}>
+        //     </div>
+        //   </div>`
+        //   ) 
 
-        // 만약 버튼눌렀을때 장바구니에 아이디가 같은 상품이 없으면  장바구니에 제품html을 추가시키고 
-        // 있으면 숫자창의 숫자가 +1이 된다 
-
-        // 만약 버튼을 누르지 않고 
-        // 드래그를 했을때 장바구니에 아이디가 같은 상품이 없으면  장바구니에 제품html을 추가시키고 
-        // 있으면 숫자창의 숫자가 +1이 된다 
-
-
-        $('.item').on('dragstart', (e) => {
-          e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
-        })
-
-        $('.cart').on('drop', (e) => {
-          var data = e.originalEvent.dataTransfer.getData('product')
-
-          var cartProduct = productList.filter((product) => {
-            return product.id == data
-          })
-          cartProduct.forEach((product) => {
-            $('.cart').append(
-              `<div class="col-md-3" >
-             <div class="cart-item" draggable="true" data-id="${product.id}">
-              <img src="${product.photo}"/>
-              <h4>${product.title}</h4>
-              <p>${product.brand}</p>
-              <p>가격 : ${product.price}</p>
-              <input type="text" value="1">
-             </div>
-            </div>`
-            )
-          });
-        })
-
-        $('.cart').on('dragover', (e) => {
-          e.preventDefault()
-        })
+        // })
+        // $('.cart').on('dragover', (e) => {
+        //   e.preventDefault()
+        // })
 
         //검색기능
         $(".search").on('input', () => {
@@ -111,32 +103,35 @@
           var arr = productList.filter((product) => {
             return product.title.includes(검색어) || product.brand.includes(검색어)
           })
+
           arr.forEach((product) => {
             $('.product-list').append(
               `<div class="col-md-3">
-             <div class="item" draggable="true" data-id="${product.id}">
-              <img src="${product.photo}"/>
-              <h4>${product.title}</h4>
-              <p>${product.brand}</p>
-              <p>가격 : ${product.price}</p>
-              <button class="add" data-id="${product.id}">담기</button>
-             </div>
-            </div>`
+            <div class="item" draggable="true" data-id="${product.id}">
+            <img src="${product.photo}"/>
+            <h4>${product.title}</h4>
+            <p>${product.brand}</p>
+            <p>가격 : ${product.price}</p>
+            <button class="add" data-id="${product.id}">담기</button>
+            </div>
+          </div>`
             )
           });
+
+          //검색어 포함한 html 배경색 넣기
           $('.product-list h4').each((i, h4) => {
             var title = h4.innerHTML
             title = title.replace(검색어, `<span style="background : yellow">${검색어}</span>`)
             h4.innerHTML = title
           })
+
+          //검색기능 후 드래그
           $('.item').on('dragstart', (e) => {
             e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
           })
-
           $('.cart').on('drop', (e) => {
             var data = e.originalEvent.dataTransfer.getData('product')
-
-            var cartProduct = productList.filter((product) => {
+            let cartProduct = productList.filter((product) => {
               return product.id == data
             })
           })
