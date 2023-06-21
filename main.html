@@ -44,56 +44,80 @@
         눌렀던거 = e.target;
       });
 
+      let products = []
+      let cart = []
+
       $.get("store.json").done((data) => {
-        var productList = data.products;
+        products = data.products;
 
         //불러온 상품api로 카드만들기
-        productList.forEach((product) => {
+        products.forEach((a) => {
           $('.product-list').append(
             `<div class="col-md-3">
-            <div class="item" draggable="true" data-id="${product.id}">
-            <img src="${product.photo}"/>
-            <h4>${product.title}</h4>
-            <p>${product.brand}</p>
-            <p>가격 : ${product.price}</p>
-            <button class="add" data-id="${product.id}">담기</button>
+            <div class="item" draggable="true" data-id="${a.id}">
+            <img src="${a.photo}"/>
+            <h4>${a.title}</h4>
+            <p>${a.brand}</p>
+            <p>가격 : ${a.price}</p>
+            <button class="add" data-id="${a.id}">담기</button>
             </div>
           </div>`
           )
         });
 
-        // 담기부터 제대로 다시하기 
-        // 카드 배열을 만들고 아이디와 수량을 체크해 넣는다. 
+        // 담기버튼 관련 기능
 
-        // let count=1
-        // let arr =[]
-        // $('.item').on('dragstart', (e) => {
-        //   e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
-        // })
-        // $('.cart').on('drop', (e) => {
-        //   $(".cart-text").html('')
-        //   var data = e.originalEvent.dataTransfer.getData('product')
-        //   let cartProduct = productList.filter((product) => {
-        //     return product.id == data
-        //   })
+        // 카드에 담기버튼을 누른 제품의 아이디와 서버에서 받아온 제품의 아이디를 비교
+        // 카트에 제품이 있으면 제품html의 카운터만 ++ 
+        // 없으면 html그려주기 
+        $('.add').on('click', (e) => {
+          let productId = e.target.dataset.id;
+          let 제품순서 = cart.findIndex((a) => { return a.id == productId });
 
-   
-        //   $('.cart').append(
-        //     `<div class="col-md-3" >
-        //     <div class="cart-item" draggable="true" data-id="${cartProduct[0].id}">
-        //     <img src="${cartProduct[0].photo}"/>
-        //     <h4>${cartProduct[0].title}</h4>
-        //     <p>${cartProduct[0].brand}</p>
-        //     <p>가격 : ${cartProduct[0].price}</p>
-        //     <input class=num type="text" value=${count}>
-        //     </div>
-        //   </div>`
-        //   ) 
+          if (제품순서 == -1) {
+            let 현재상품 = products.find((a) => { return a.id == productId });
+            현재상품.count = 1;
+            cart.push(현재상품);
+          } else {
+            cart[제품순서].count++;
+          }
+          console.log(cart);
+          $('.cart').html('')
 
-        // })
-        // $('.cart').on('dragover', (e) => {
-        //   e.preventDefault()
-        // })
+          cart.forEach((a) => {
+            $('.cart').append(
+              `<div class="col-md-3" >
+            <div class="cart-item" draggable="true" data-id="${a.id}">
+            <img src="${a.photo}"/>
+            <h4>${a.title}</h4>
+            <p>${a.brand}</p>
+            <p>가격 : ${a.price}</p>
+            <input class=num type="text" value='${a.count}'>
+            </div>
+          </div>`
+            )
+          })
+        })
+
+        // 제품 드래그 관련 기능
+        // 먼저 카트배열에 드래그를 시작한 제품객체와 같은 제품이 있다면 갯수만올리고 
+        // 없다면 카드배열에 푸쉬하고 html을 그린다.
+        $('.item').on('dragstart', (e) => {
+          e.originalEvent.dataTransfer.setData('id', e.currentTarget.dataset.id);
+        })
+
+        $('.cart').on('dragover', (e) => {
+          e.preventDefault()
+        })
+
+        $('.cart').on('drop', (e) => {
+          $('.cart').html('')
+          let productId = e.originalEvent.dataTransfer.getData('id');
+          $('.add').eq(productId).click();
+         
+        })
+
+
 
         //검색기능
         $(".search").on('input', () => {
@@ -146,3 +170,36 @@
 </body>
 
 </html>
+<!-- 
+// 담기부터 제대로 다시하기 
+        // 카드 배열을 만들고 아이디와 수량을 체크해 넣는다. 
+
+        // let count=1
+        // let arr =[]
+        // $('.item').on('dragstart', (e) => {
+        //   e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
+        // })
+        // $('.cart').on('drop', (e) => {
+        //   $(".cart-text").html('')
+        //   var data = e.originalEvent.dataTransfer.getData('product')
+        //   let cartProduct = productList.filter((product) => {
+        //     return product.id == data
+        //   })
+
+   
+        //   $('.cart').append(
+        //     `<div class="col-md-3" >
+        //     <div class="cart-item" draggable="true" data-id="${cartProduct[0].id}">
+        //     <img src="${cartProduct[0].photo}"/>
+        //     <h4>${cartProduct[0].title}</h4>
+        //     <p>${cartProduct[0].brand}</p>
+        //     <p>가격 : ${cartProduct[0].price}</p>
+        //     <input class=num type="text" value=${count}>
+        //     </div>
+        //   </div>`
+        //   ) 
+
+        // })
+        // $('.cart').on('dragover', (e) => {
+        //   e.preventDefault()
+        // }) -->
