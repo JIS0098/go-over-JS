@@ -36,7 +36,7 @@
     </div>
     <div>
       <h4>최종가격</h4>
-      <p class="money">합계</p>
+      <p class="final-price">합계</p>
       <button class="buy">구매하기</button>
     </div>
 
@@ -50,6 +50,41 @@
 
       let products = []
       let cart = []
+
+      function add(){
+          $('.add').on('click', (e) => {
+          let productId = e.target.dataset.id;
+          let 제품순서 = cart.findIndex((a) => { return a.id == productId });
+
+          if (제품순서 == -1) {
+            let 현재상품 = products.find((a) => { return a.id == productId });
+            현재상품.count = 1;
+            cart.push(현재상품);
+          } else {
+            cart[제품순서].count++;
+          }
+
+          $('.cart').html('')
+
+          cart.forEach((a) => {
+            $('.cart').append(
+              `<div class="col-md-3" >
+            <div class="cart-item" draggable="true" data-id="${a.id}">
+            <img src="${a.photo}"/>
+            <h4>${a.title}</h4>
+            <div>${a.brand}</div>
+            <p class='price'>${a.price}</p>
+            <input class='item-count'type="number" value='${a.count}'>
+            </div>
+          </div>`
+            )
+          })
+          계산하기()
+          $('.item-count').on('input',(e)=>{
+            계산하기()
+          })
+        })
+        }
 
       $.get("store.json").done((data) => {
         products = data.products;
@@ -74,35 +109,8 @@
         // 카드에 담기버튼을 누른 제품의 아이디와 서버에서 받아온 제품의 아이디를 비교
         // 카트에 제품이 있으면 제품html의 카운터만 ++ 
         // 없으면 html그려주기 
-        $('.add').on('click', (e) => {
-          let productId = e.target.dataset.id;
-          let 제품순서 = cart.findIndex((a) => { return a.id == productId });
 
-          if (제품순서 == -1) {
-            let 현재상품 = products.find((a) => { return a.id == productId });
-            현재상품.count = 1;
-            cart.push(현재상품);
-          } else {
-            cart[제품순서].count++;
-          }
-
-          $('.cart').html('')
-
-          cart.forEach((a) => {
-            $('.cart').append(
-              `<div class="col-md-3" >
-            <div class="cart-item" draggable="true" data-id="${a.id}">
-            <img src="${a.photo}"/>
-            <h4>${a.title}</h4>
-            <p>${a.brand}</p>
-            <p class='price'>가격 : ${a.price}</p>
-            <input class='num' type="text" value='${a.count}'>
-            </div>
-          </div>`
-            )
-          })
-          calculate();
-        })
+        add();
 
         // 제품 드래그 관련 기능
         // 먼저 카트배열에 드래그를 시작한 제품객체와 같은 제품이 있다면 갯수만올리고 
@@ -119,17 +127,15 @@
           $('.cart').html('')
           let productId = e.originalEvent.dataTransfer.getData('id');
           $('.add').eq(productId).click();
-
         })
-
-
+      })
 
         //검색기능
         $(".search").on('input', () => {
           var 검색어 = $('.search').val();
           $('.product-list').html('');
 
-          var arr = productList.filter((product) => {
+          var arr = products.filter((product) => {
             return product.title.includes(검색어) || product.brand.includes(검색어)
           })
 
@@ -153,37 +159,27 @@
             title = title.replace(검색어, `<span style="background : yellow">${검색어}</span>`)
             h4.innerHTML = title
           })
-
-          //검색기능 후 드래그
-          $('.item').on('dragstart', (e) => {
-            e.originalEvent.dataTransfer.setData('product', e.currentTarget.dataset.id);
-          })
-          $('.cart').on('drop', (e) => {
-            var data = e.originalEvent.dataTransfer.getData('product')
-            let cartProduct = productList.filter((product) => {
-              return product.id == data
-            })
-          })
+          add();
         })
-
-        //계산하기 
-        //  장바구니의 각 제품카드의 가격과 제품수량을 곱한후 모두 더한다.
-        //  더한 값을 html로 그려준다.
-
-        function calculate() {
-          let finalPrice = 0;
-          for(let i = 0; i<$('.num').length; i++){
-            let price = $('.num').eq(i).val();
-            let count = $('.num').eq(i).siblings('p').text();
-            finalPrice += parseFloat(price * count);
-          }
-          $('.money').html('합계' + finalPrice)
+      
         
+     
+        //계산하기 
+        function 계산하기(){
+         let finalPrice=0
+
+        for(let i=0; i<$('.item-count').length;i++){
+          let price = $('.item-count').eq(i).siblings('p').html();
+          let count = $('.item-count').eq(i).val();
+          finalPrice += parseFloat(price * count);
         }
+        $('.final-price').html('합계'+finalPrice)
+       }
+      
 
 
 
-      })
+    
 
     </script>
 
