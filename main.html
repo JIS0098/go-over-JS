@@ -15,7 +15,7 @@
 
 <body style="background-color: #f4f4f4">
 
- 
+
   <nav class="nav">
     <a class="nav-link active" aria-current="page" href="#">집꾸미기</a>
     <a class="nav-link" href="#">Home</a>
@@ -44,29 +44,27 @@
     <button class="buy">구매하기</button>
   </div>
 
-  <div class="black-bg modal1">
+  <div class="modal1">
     <div class="white-bg">
-      <form>
-        <div class="mb-3">
-          <h4>성함</h4>
-          <input type="text" class="form-control" id="name" />
-        </div>
-        <div class="mb-3">
-          <h4>전화번호</h4>
-          <input type="text" class="form-control" id="number" />
-        </div>
-        <button type="submit" class="btn btn-dark" id="send">입력완료</button>
-        <button class="btn btn-dark" id="close">닫기</button>
-      </form>
+      <div class="mb-3">
+        <h4>성함</h4>
+        <input type="text" class="form-control" id="name" />
+      </div>
+      <div class="mb-3">
+        <h4>전화번호</h4>
+        <input type="text" class="form-control" id="number" />
+      </div>
+      <button type="submit" class="btn btn-dark" id="send">입력완료</button>
+      <button class="btn btn-dark close">닫기</button>
     </div>
   </div>
 
-  <div class="modal2" style="display: none;">
+  <div class="modal2">
     <div class="white-bg">
       <h4>영수증</h4>
-      <canvas id="canvas" width="350" height="350"></canvas>
+      <canvas id="canvas" width="500" height="500"></canvas>
       <div>
-        <button class="close">닫기</button>
+        <button class="btn btn-dark close">닫기</button>
       </div>
     </div>
   </div>
@@ -212,27 +210,60 @@
     $('.buy').on('click', () => {
       $('.black-bg').css('display', 'block');
     })
-    $('#close').on('click', () => {
-      $('.black-bg').css('display', 'none');
+    $('.buy').on('click', () => {
+      $('.modal1').css('display', 'block');
     })
-    $('.black-bg').on('click', () => {
-      $('.black-bg').css('display', 'none');
-    })
+
 
     // 영수증 띄우기
-    $('#send').click((e)=>{
+
+    let 성함 = '';
+    let 연락처 = '';
+
+    $('#name').on('input', () => {
+      성함 = $('#name').val();
+    });
+
+    $('#number').on('input', () => {
+      연락처 = $('#number').val();
+    });
+
+
+
+    $('#send').click((e) => {
       e.preventDefault();
-      $('.modal2').css('display','block')
+      $('.modal1').css('display', 'none')
+      $('.modal2').css('display', 'block')
+
+      const date = new Date();
+
+      var canvas = document.getElementById('canvas');
+      var c = canvas.getContext('2d');
+      c.font = '20px dotum';
+      c.fillText(`${date.toLocaleString('ko-kr')}`, 30, 50);
+      c.fillText('구매자: ' + 성함, 30, 90);
+      c.fillText('연락처: ' + 연락처, 30, 120);
+      c.fillText('연락처: ' + 연락처, 30, 120);
+      c.fillText('총 '+$('.final-price').html(), 30, 450);
+
+
     })
-    const date = new Date();
 
-    var canvas = document.getElementById('canvas');
-    var c = canvas.getContext('2d');
-    c.font = '20px dotum';
-    c.fillText('영수증', 30, 20);
-    c.fillText(`${date.toLocaleString('ko-kr')}`, 30, 50);
 
-   
+
+
+
+    // 영수증 닫기
+    $('.close').click(() => {
+      $('.modal1').css('display', 'none')
+      $('.modal2').css('display', 'none')
+    })
+    $('.black-bg').click(() => {
+      $('.modal1').css('display', 'none')
+
+    })
+
+
 
 
 
