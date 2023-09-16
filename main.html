@@ -23,29 +23,32 @@
     <a class="nav-link" href="#">시공견적</a>
   </nav>
 
-  <div class="container">
-    <input class="search" type="text" placeholder="검색어 입력" />
-  </div>
 
-  <div id="container">
-    <div class="row product-list"></div>
-  </div>
 
-  <div class="container" style="background-color: lightgrey; padding: 20px; margin-top: 20px">
-    <h4>장바구니</h4>
-    <div class="row cart">
-      <p class="cart-text">여기로 드래그</p>
+  <div  class="bg">
+    <div class="main container"> 
+      <input class="search" type="text" placeholder="검색어 입력" />
+      <div class="row product-list"></div>
+      <div class="row cart-box" style="background-color: lightgrey; padding: 20px; margin-top: 50px">
+        <h4 style="padding: 0px;">장바구니</h4>
+        <div class="row cart">
+          <p style="padding: 0px;" class="cart-text">여기로 드래그</p>
+        </div>
+        <div>
+        </div>
+        <div style="padding: 0px;" class="result">
+          <h4 >최종가격</h4>
+            <p class="final-price">합계</p>
+            <button class="result-buy">구매하기</button>
+        </div>
+        </div>
     </div>
-    <div>
-
-    </div>
-    <h4>최종가격</h4>
-    <p class="final-price">합계</p>
-    <button class="buy">구매하기</button>
   </div>
+
 
   <div class="modal1">
-    <div class="white-bg">
+    <div class="white-bg 
+    write">
       <div class="mb-3">
         <h4>성함</h4>
         <input type="text" class="form-control" id="name" />
@@ -60,10 +63,12 @@
   </div>
 
   <div class="modal2">
-    <div class="white-bg">
+    <div class="white-bg receipt">
       <h4>영수증</h4>
+      <p>==========================================</p>
       <canvas id="canvas" width="500" height="500"></canvas>
       <div>
+        <p>==========================================</p>
         <button class="btn btn-dark close">닫기</button>
       </div>
     </div>
@@ -207,10 +212,10 @@
     }
 
     // 구매하기
-    $('.buy').on('click', () => {
+    $('.result-buy').on('click', () => {
       $('.black-bg').css('display', 'block');
     })
-    $('.buy').on('click', () => {
+    $('.result-buy').on('click', () => {
       $('.modal1').css('display', 'block');
     })
 
